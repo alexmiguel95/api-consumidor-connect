@@ -1,6 +1,6 @@
 from flask import Flask
 from app.views.status import bp_home
-from models import db
+from app.models import db
 from environs import Env
 
 
