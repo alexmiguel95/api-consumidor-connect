@@ -6,6 +6,7 @@ db = SQLAlchemy()
 mg = Migrate()
 
 
+# Tabela auxilar N:N entre Produtores e Consumidores
 produtores_consumidores = db.Table(
     "produtores_consumidores",
     db.Column("produtores_id", db.Integer, db.ForeignKey("produtores.id")),
@@ -19,6 +20,7 @@ class Produtores(db.Model):
     email = db.Column(db.String)
     telefone = db.Column(db.String)
 
+    # Relação 1:N entre Produtores e Produtos
     produtores_produtos = db.relationship(
         "Produtos",
         back_populates="produtos_produtores"
@@ -32,6 +34,7 @@ class Produtos(db.Model):
     link_foto = db.Column(db.String)
     link_video = db.Column(db.String)
 
+    # Relação N:1 Entre Produtos e Produtos e Produtores
     fk_produtores = db.Column(db.Integer, db.ForeignKey("produtores.id"))
     produtos_produtores = db.relationship(
         "Produtores",
@@ -44,3 +47,13 @@ class Consumidores(db.Model):
     nome = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String)
     telefone = db.Column(db.String)
+
+
+""" Marshmallow """
+# Produtores
+
+
+# Consumidores
+
+
+# Produtos
