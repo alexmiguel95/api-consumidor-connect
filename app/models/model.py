@@ -50,10 +50,10 @@ class Consumidores(db.Model):
 
 
 """ Marshmallow """
-# Produtores
+# ProdutoresSchema
 
 
-# Consumidores
+# ConsumidoresSchema
 
 
-# Produtos
+# ProdutosSchema
