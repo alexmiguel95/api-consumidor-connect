@@ -93,9 +93,6 @@ class ConsumidoresResource(Resource):
         try:
             db.session.delete(consumidor)
             db.session.commit()
-            return {
-                "data": ConsumidoresSchema().dump(consumidor),
-                "message": "Consumidor deletado!"
-            }
+            return build_api_response(HTTPStatus.OK)
         except IntegrityError:
             return build_api_response(HTTPStatus.BAD_REQUEST)
