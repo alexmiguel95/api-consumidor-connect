@@ -103,5 +103,4 @@ class ConsumidoresSchema(ma.SQLAlchemySchema):
     id = ma.auto_field()
     nome = ma.auto_field()
     email = ma.auto_field()
-    telefone = ma.auto_field()
     consumidores_produtores = fields.Nested(ProdutoresSchema, many=True)

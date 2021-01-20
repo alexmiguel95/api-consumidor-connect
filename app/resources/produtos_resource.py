@@ -12,13 +12,9 @@ class ProdutosResource(Resource):
     def post(self):
         data = request.get_json()
 
-        produto = Produtos(
-            nome=data["nome"],
-            descricao=data["descricao"],
-            link_foto=data["link_foto"],
-            link_video=data["link_video"],
-            fk_produtores=data["fk_produtores"]
-        )
+        # Pegar ID e email do token
+        produtor_token_id = get_jwt_identity()
+        produtor_token_email = get_jwt_claims().get("email")
 
         # Verificar se o ID e email do token é de um Produtor cadastrado
         produtor = Produtores.query.filter_by(
@@ -51,10 +47,14 @@ class ProdutosResource(Resource):
             except IntegrityError:
                 return build_api_response(HTTPStatus.BAD_REQUEST)
 
-    def get(self, id=0):
-        if id > 0:
-            return {"data": ProdutosSchema().dump(Produtos.query.get(id))}
+        return build_api_response(HTTPStatus.UNAUTHORIZED)
 
+    @jwt_required
+    def get(self):
+        # Pegar ID e email do token
+        produtor_token_id = get_jwt_identity()
+
+        # Retornar todos os produtos do produtor logado
         return {
             "data": ProdutosSchema(many=True).dump(Produtos.query.filter_by(
                 fk_produtor=produtor_token_id

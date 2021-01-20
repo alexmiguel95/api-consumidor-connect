@@ -76,9 +76,6 @@ class ProdutoresResource(Resource):
         try:
             db.session.delete(produtor)
             db.session.commit()
-            return {
-                "data": ProdutoresSchema().dump(produtor),
-                "message": "Produtor deletado!"
-            }
+            return build_api_response(HTTPStatus.OK)
         except IntegrityError:
             return build_api_response(HTTPStatus.BAD_REQUEST)
