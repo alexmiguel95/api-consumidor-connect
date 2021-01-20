@@ -10,7 +10,9 @@ def build_response_message(http_status):
         HTTPStatus.BAD_REQUEST: 'Bad request',
         HTTPStatus.CREATED: 'Created',
         HTTPStatus.NOT_FOUND: 'Not found',
-        HTTPStatus.OK: 'ok'
+        HTTPStatus.OK: 'Ok',
+        HTTPStatus.UNAUTHORIZED: "Unauthorized - Invalid email or password",
+        HTTPStatus.CONFLICT: "Conflict - Email already exists"
     }
 
     return {'status': messages[http_status]}
