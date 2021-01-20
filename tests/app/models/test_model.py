@@ -5,7 +5,8 @@ def test_class_produtores():
     produtor = Produtores(
         nome="Alex Miguel",
         email="alex@gmail.com",
-        telefone="41997464"
+        telefone="41997464",
+        senha="123456"
     )
 
     expected = produtor.nome
@@ -18,7 +19,8 @@ def test_class_consumidores():
     consumidor = Consumidores(
         nome="Alex Miguel",
         email="alex@gmail.com",
-        telefone="41997464"
+        telefone="41997464",
+        senha="123456"
     )
 
     expected = consumidor.nome
@@ -33,7 +35,7 @@ def test_class_produtos():
         descricao="Morango muito bom",
         link_foto="url",
         link_video="url",
-        fk_produtores=1
+        fk_produtor=1
     )
 
     expected = produto.nome
