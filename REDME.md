@@ -347,6 +347,7 @@ Response:
 
 ####  DELETE /produtos/<int:id_produto>
 > Apagar um Produto. Só um Produtor pode apagar um produto.
+
 Header:
 
 Authorization: Bearer <_token_>
