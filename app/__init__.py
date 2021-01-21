@@ -24,7 +24,6 @@ def create_app(config="development"):
    )
    app.config['SQLALCHEMY_DATABASE_URI'] = env.str('SQLALCHEMY_DATABASE_URI')
    app.config['JWT_SECRET_KEY'] = token_hex(16)
-   app.config.from_object(f'config.{configs[config]}')
 
    db.init_app(app)
    mg.init_app(app, db)
