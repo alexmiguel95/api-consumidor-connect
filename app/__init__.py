@@ -10,6 +10,12 @@ from app.resources.produtores_resource import ProdutoresResource
 from app.resources.consumidores_resource import ConsumidoresResource
 from app.resources.login_consumidores_resource import LoginConsumidoresResource
 
+configs = {
+    'development': 'DevelopmentConfig',
+    'production': 'ProductionConfig',
+    'test': 'TestingConfig'
+}
+
 
 def create_app(config="development"):
    env = Env()
@@ -24,6 +30,7 @@ def create_app(config="development"):
    )
    app.config['SQLALCHEMY_DATABASE_URI'] = env.str('SQLALCHEMY_DATABASE_URI')
    app.config['JWT_SECRET_KEY'] = token_hex(16)
+   app.config.from_object(f'config.{configs[config]}')
 
    db.init_app(app)
    mg.init_app(app, db)
