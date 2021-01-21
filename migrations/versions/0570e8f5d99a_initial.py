@@ -1,8 +1,8 @@
-"""Remove telefone schema Consumidores
+"""Initial
 
-Revision ID: 0084fca03b19
+Revision ID: 0570e8f5d99a
 Revises: 
-Create Date: 2021-01-20 20:06:33.648783
+Create Date: 2021-01-20 22:03:46.041737
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '0084fca03b19'
+revision = '0570e8f5d99a'
 down_revision = None
 branch_labels = None
 depends_on = None
