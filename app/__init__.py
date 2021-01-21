@@ -11,9 +11,9 @@ from app.resources.consumidores_resource import ConsumidoresResource
 from app.resources.login_consumidores_resource import LoginConsumidoresResource
 
 configs = {
-    'development': 'DevelopmentConfig',
-    'production': 'ProductionConfig',
-    'test': 'TestingConfig'
+   'development': 'DevelopmentConfig',
+   'production': 'ProductionConfig',
+   'test': 'TestingConfig'
 }
 
 
