@@ -1,30 +1,34 @@
 import requests
 import pytest
 
+base_url = 'http://localhost:5000'
+
 @pytest.fixture
 def post_data_table_produtos():
 
         body = {'nome': 'Test Tester',
         'email': 'test@test.com.br',
-        'telefone': '41981234567'}
+        'telefone': '41981234567',
+        'senha': 'testando'}
 
-        requests.post('http://localhost:5000/produtores',json=body)
+        requests.post(f'{base_url}/produtores',json=body).json()
 
-        data = requests.get('http://localhost:5000/produtores').json()
+        body = {'email': 'test@test.com.br',
+        'senha': 'testando'}
 
-        data = data['data']
+        secret = requests.post(f'{base_url}/login-produtores',json=body).json()['data']['access_token']
 
-        for line in data:
-                if line['nome'] == 'Test Tester' and line['email'] == 'test@test.com.br' and \
-                        line['telefone'] == '41981234567':
+        body = {
+	"nome": "Coco gelado",
+	"descricao": "Muito doce",
+	"link_foto": [
+		"https://razoesparaacreditar.com/wp-content/uploads/2018/09/coco-verde-300x171.jpg",  "https://www.fapema.br/wp-content/uploads/2015/05/0coco.jpg"
+	],
+	"link_video": "https://www.youtube.com/watch?v=d1yDT2lbbTs&ab_channel=MalacachetaSEMFRONTEIRAS"
+        }
 
-                    body = {'nome': 'Test Tester',
-                            'descricao': 'teste produto',
-                            'link_foto': 'www.testef.com.br',
-                            'link_video': 'www.testev.com.br',
-                            'fk_produtores': line['id']}
+        return requests.post(f'{base_url}/produtos', headers={'Authorization': f'Bearer {secret}'}, json=body).json()
 
-                    return requests.post('http://localhost:5000/produtos',json=body).json()
 
 def test_post_data_table_produtos(post_data_table_produtos):
 
@@ -38,97 +42,101 @@ def test_post_data_table_produtos(post_data_table_produtos):
 @pytest.fixture
 def get_data_table_produtos():
 
-        data = requests.get('http://localhost:5000/produtos').json()
 
-        data = data['data']
+        body = {'email': 'test@test.com.br',
+        'senha': 'testando'}
 
-        for line in data:
-                if line['nome'] == 'Test Tester' and line['descricao'] == 'teste produto' and \
-                        line['link_foto'] == 'www.testef.com.br' and line['link_video'] == 'www.testev.com.br':
+        secret = requests.post(f'{base_url}/login-produtores',json=body).json()['data']['access_token']
 
-                        return requests.get(f"http://localhost:5000/produtos/{line['id']}").json()['data']
+        return requests.get(f'{base_url}/produtos', headers={'Authorization': f'Bearer {secret}'}).json()
 
 
 def test_get_data_table_produtos(get_data_table_produtos):
 
-        line_id = get_data_table_produtos['id']
+        line_id = get_data_table_produtos['data'][0]['id']
 
 
         result = get_data_table_produtos
 
-        expected = {'id': line_id, 'nome': 'Test Tester', 'descricao': 'teste produto', 'link_foto': 'www.testef.com.br',
-                            'link_video': 'www.testev.com.br'}
+        expected = {
+                        "data": [
+                          {
+                            "link_video": "https://www.youtube.com/watch?v=d1yDT2lbbTs&ab_channel=MalacachetaSEMFRONTEIRAS",
+                            "descricao": "Muito doce",
+                            "id": line_id,
+                            "link_foto": "{https://razoesparaacreditar.com/wp-content/uploads/2018/09/coco-verde-300x171.jpg,https://www.fapema.br/wp-content/uploads/2015/05/0coco.jpg}",
+                            "nome": "Coco gelado"
+                          }
+                        ]
+                }
+
 
         assert result == expected
 
 @pytest.fixture
-def put_data_table_produtos():
-
-    body = {'nome': 'Testado',
-            'descricao': 'produto testado'}
+def delete_data_table_produtos():
 
 
-    data = requests.get('http://localhost:5000/produtos').json()
+        body = {'email': 'test@test.com.br',
+        'senha': 'testando'}
 
-    data = data['data']
+        secret = requests.post(f'{base_url}/login-produtores',json=body).json()['data']['access_token']
 
-    for line in data:
-            if line['nome'] == 'Test Tester' and line['descricao'] == 'teste produto' and \
-                    line['link_foto'] == 'www.testef.com.br' and line['link_video'] == 'www.testev.com.br':
+        line_id = requests.get(f'{base_url}/produtos', headers={'Authorization': f'Bearer {secret}'}).json()['data'][0]['id']
+
+        result = requests.delete(f'{base_url}/produtos/{line_id}', headers={'Authorization': f'Bearer {secret}'}).json()
+
+        requests.delete(f"{base_url}/produtores", headers={'Authorization': f'Bearer {secret}'})
+
+        return result
 
 
-                requests.put(f"http://localhost:5000/produtos/{line['id']}",json=body)
-
-                return requests.get(f"http://localhost:5000/produtos/{line['id']}").json()['data']
+def test_delete_data_table_produtos(delete_data_table_produtos):
 
 
-def test_put_data_table_produtos(put_data_table_produtos):
+        result = delete_data_table_produtos
 
-        line_id = put_data_table_produtos['id']
+        expected = {"status": "Ok"}
 
-        result = put_data_table_produtos
-
-        expected = {'id': line_id, 'nome': 'Testado', 'descricao': 'produto testado', 'link_foto': 'www.testef.com.br',
-                            'link_video': 'www.testev.com.br'}
 
         assert result == expected
     
 
 
-@pytest.fixture
-def delete_data_table_produtos():
+# @pytest.fixture
+# def delete_data_table_produtos():
 
-        data = requests.get('http://localhost:5000/produtos').json()
+#         data = requests.get('http://localhost:5000/produtos').json()
 
-        data = data['data']
+#         data = data['data']
 
-        for line in data:
-                if line['nome'] == 'Testado' and line['descricao'] == 'produto testado' and \
-                        line['link_foto'] == 'www.testef.com.br' and line['link_video'] == 'www.testev.com.br':
+#         for line in data:
+#                 if line['nome'] == 'Testado' and line['descricao'] == 'produto testado' and \
+#                         line['link_foto'] == 'www.testef.com.br' and line['link_video'] == 'www.testev.com.br':
 
-                        requests.delete(f"http://localhost:5000/produtos/{line['id']}").json()
+#                         requests.delete(f"http://localhost:5000/produtos/{line['id']}").json()
 
                         
-                        data = requests.get('http://localhost:5000/produtores').json()
+#                         data = requests.get('http://localhost:5000/produtores').json()
 
-                        data = data['data']
+#                         data = data['data']
 
-                        for line in data:
+#                         for line in data:
                         
-                                if line['nome'] == 'Test Tester' and line['email'] == 'test@test.com.br' and \
-                                        line['telefone'] == '41981234567':
+#                                 if line['nome'] == 'Test Tester' and line['email'] == 'test@test.com.br' and \
+#                                         line['telefone'] == '41981234567':
 
-                                        requests.delete(f"http://localhost:5000/produtores/{line['id']}")
+#                                         requests.delete(f"http://localhost:5000/produtores/{line['id']}")
 
-                                        return 'deleted'
+#                                         return 'deleted'
                 
 
 
-def test_delete_data_table_produtos(delete_data_table_produtos):
+# def test_delete_data_table_produtos(delete_data_table_produtos):
 
-    result = delete_data_table_produtos
+#     result = delete_data_table_produtos
 
-    expected = 'deleted'
+#     expected = 'deleted'
 
-    assert result == expected
+#     assert result == expected
 

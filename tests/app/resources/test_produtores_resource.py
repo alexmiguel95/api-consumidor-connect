@@ -55,7 +55,6 @@ def get_data_table_produtores():
 
         data = data['data']
 
-
         for item in data:
                 if item["produtores_produtos"] == [] and item['nome'] == 'Test Tester' and item['email'] == 'test@test.com.br' and \
                         item['telefone'] == '41981234567':
@@ -86,13 +85,16 @@ def put_data_table_produtores():
         for item in data:
                 if item["produtores_produtos"] == [] and item['nome'] == 'Test Tester' and item['email'] == 'test@test.com.br' and \
                         item['telefone'] == '41981234567':
-                        print('aaaaaaaaaaaaaaaaaaaaaaaa',access_token)
+
+                        body = {'email': 'test@test.com.br',
+                        'senha': 'testando'}
+
+                        secret = requests.post(f'{base_url}/login-produtores',json=body).json()['data']['access_token']
 
                         body = {'nome': 'Testado'}
 
-                        auth = JWTAuth(access_token)
+                        requests.put(f"{base_url}/produtores", headers={'Authorization': f'Bearer {secret}'}, json=body)
 
-                        requests.put(f"{base_url}/produtores", auth=auth, json=body)
                         return requests.get(f"{base_url}/produtores/{item['id']}").json()['data']
 
 
@@ -113,39 +115,21 @@ def delete_data_table_produtores():
         body = {'email': 'test@test.com.br',
         'senha': 'testando'}
 
-        access_token = requests.post(f'{base_url}/login-produtores',json=body).json()['data']['access_token']
+        secret = requests.post(f'{base_url}/login-produtores',json=body).json()['data']
 
-        auth = JWTAuth(access_token)
+        secret = secret['access_token']
 
-        result = requests.delete(f"{base_url}/produtores", auth=auth)
 
-        print(result)
+        result = requests.delete(f"{base_url}/produtores", headers={'Authorization': f'Bearer {secret}'})
 
-        # result = 'deleted'
+        return result
 
-        # for line in data:
-                
-        #         if line['nome'] == 'Testado' and line['email'] == 'test@test.com.br' and \
-        #                 line['telefone'] == '41981234567':
-
-        #                 requests.delete(f"http://localhost:5000/produtores/{line['id']}")
-
-        #                 data = requests.get('http://localhost:5000/produtores').json()
-
-        #                 data = data['data']
-
-        #                 for line in data:
-
-        #                         if line['nome'] == 'Test Tester' and line['email'] == 'test@test.com.br' and \
-        #                                 line['telefone'] == '41981234567':
-        #                                 result = 'not deleted'
-
-        #         return result
 
 def test_delete_data_table_produtores(delete_data_table_produtores):
-        
-        result = delete_data_table_produtores
 
-        expected = 'deleted'
+        result = delete_data_table_produtores.json()
+
+
+        expected = {"status": "Ok"}
 
         assert result == expected
