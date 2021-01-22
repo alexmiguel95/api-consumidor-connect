@@ -1,13 +1,17 @@
 import requests
+from requests_jwt import JWTAuth
 import pytest
+
+base_url = 'http://localhost:5000'
 
 @pytest.fixture
 def post_data_table_produtores():
         body = {'nome': 'Test Tester',
                 'email': 'test@test.com.br',
-                'telefone': '41981234567'}
+                'telefone': '41981234567',
+                'senha': 'testando'}
 
-        return requests.post('http://localhost:5000/produtores',json=body).json()
+        return requests.post(f'{base_url}/produtores',json=body).json()
 
 def test_post_data_table_produtores(post_data_table_produtores):
 
@@ -17,17 +21,44 @@ def test_post_data_table_produtores(post_data_table_produtores):
 
         assert result == expected
 
+
+@pytest.fixture
+def post_login_produtores():
+
+        body = {'email': 'test@test.com.br',
+                'senha': 'testando'}
+
+        return requests.post(f'{base_url}/login-produtores',json=body).json()
+
+def test_login_produtores(post_login_produtores):
+
+        access_token = post_login_produtores['data']['access_token']
+
+        expected = {
+                        "data": {
+                        "nome": "Test Tester",
+                        "email": "test@test.com.br",
+                        "telefone": "41981234567",
+                        "access_token": access_token
+                        }
+                }
+
+
+        assert post_login_produtores == expected
+
+
+
 @pytest.fixture
 def get_data_table_produtores():
 
-        data = requests.get('http://localhost:5000/produtores').json()
+        data = requests.get(f'{base_url}/produtores').json()
 
         data = data['data']
 
-        for line in data:
-                if line['nome'] == 'Test Tester' and line['email'] == 'test@test.com.br' and \
-                        line['telefone'] == '41981234567':
-                        return requests.get(f"http://localhost:5000/produtores/{line['id']}").json()['data']
+        for item in data:
+                if item["produtores_produtos"] == [] and item['nome'] == 'Test Tester' and item['email'] == 'test@test.com.br' and \
+                        item['telefone'] == '41981234567':
+                        return requests.get(f"{base_url}/produtores/{item['id']}").json()['data']
 
 
 def test_get_data_table_produtores(get_data_table_produtores):
@@ -37,24 +68,34 @@ def test_get_data_table_produtores(get_data_table_produtores):
 
         result = get_data_table_produtores
 
-        expected = {'email': 'test@test.com.br', 'id': line_id, 'nome': 'Test Tester', 'telefone': '41981234567'}
+        expected = {'email': 'test@test.com.br', 'id': line_id, 'nome': 'Test Tester', 'telefone': '41981234567', "produtores_produtos": []}
 
         assert result == expected
 
 @pytest.fixture
 def put_data_table_produtores():
 
-        body = {'nome': 'Testado'}
+        body = {'email': 'test@test.com.br',
+                'senha': 'testando'}
 
-        data = requests.get('http://localhost:5000/produtores').json()
+        access_token = requests.post(f'{base_url}/login-produtores',json=body).json()['data']['access_token']
 
-        data = data['data']
+        data = requests.get(f'{base_url}/produtores').json()['data']
 
-        for line in data:
-                if line['nome'] == 'Test Tester' and line['email'] == 'test@test.com.br' and \
-                        line['telefone'] == '41981234567':
-                        requests.put(f"http://localhost:5000/produtores/{line['id']}",json=body)
-                        return requests.get(f"http://localhost:5000/produtores/{line['id']}").json()['data']
+        for item in data:
+                if item["produtores_produtos"] == [] and item['nome'] == 'Test Tester' and item['email'] == 'test@test.com.br' and \
+                        item['telefone'] == '41981234567':
+
+                        body = {'email': 'test@test.com.br',
+                        'senha': 'testando'}
+
+                        secret = requests.post(f'{base_url}/login-produtores',json=body).json()['data']['access_token']
+
+                        body = {'nome': 'Testado'}
+
+                        requests.put(f"{base_url}/produtores", headers={'Authorization': f'Bearer {secret}'}, json=body)
+
+                        return requests.get(f"{base_url}/produtores/{item['id']}").json()['data']
 
 
 def test_put_data_table_produtores(put_data_table_produtores):
@@ -63,42 +104,32 @@ def test_put_data_table_produtores(put_data_table_produtores):
 
         result = put_data_table_produtores
 
-        expected = {'email': 'test@test.com.br', 'id': line_id, 'nome': 'Testado', 'telefone': '41981234567'}
+        expected = {'email': 'test@test.com.br', 'id': line_id, 'nome': 'Testado', 'telefone': '41981234567', "produtores_produtos": []}
+
 
         assert result == expected
 
 @pytest.fixture
 def delete_data_table_produtores():
 
-        data = requests.get('http://localhost:5000/produtores').json()
+        body = {'email': 'test@test.com.br',
+        'senha': 'testando'}
 
-        data = data['data']
+        secret = requests.post(f'{base_url}/login-produtores',json=body).json()['data']
 
-        result = 'deleted'
+        secret = secret['access_token']
 
-        for line in data:
-                
-                if line['nome'] == 'Testado' and line['email'] == 'test@test.com.br' and \
-                        line['telefone'] == '41981234567':
 
-                        requests.delete(f"http://localhost:5000/produtores/{line['id']}")
+        result = requests.delete(f"{base_url}/produtores", headers={'Authorization': f'Bearer {secret}'})
 
-                        data = requests.get('http://localhost:5000/produtores').json()
+        return result
 
-                        data = data['data']
-
-                        for line in data:
-
-                                if line['nome'] == 'Test Tester' and line['email'] == 'test@test.com.br' and \
-                                        line['telefone'] == '41981234567':
-                                        result = 'not deleted'
-
-                return result
 
 def test_delete_data_table_produtores(delete_data_table_produtores):
-        
-        result = delete_data_table_produtores
 
-        expected = 'deleted'
+        result = delete_data_table_produtores.json()
+
+
+        expected = {"status": "Ok"}
 
         assert result == expected
