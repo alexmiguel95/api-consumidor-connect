@@ -8,7 +8,7 @@ Nosso objetivo é incentivar e aproximar os pequenos negócios e produtores loca
 ---
 &nbsp; 
 ## Endpoints
-###  Base URL: 
+###  Base URL: https://consumidor-connect-app.herokuapp.com/
 &nbsp; 
 ###  Rotas públicas
 ####  POST /produtores
