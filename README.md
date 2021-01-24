@@ -2,7 +2,7 @@
 
 |   Descrição	|   Tecnologias 	|
 |---	|---	|
-|Os pequenos negócios e produtores locais são extremamente importantes para a economia. Infelizmente, a maioria acaba comprando de empresas tradicionais. |  Python com as bibliotecas: _Pytest_, _SQLAlchemy_, _Migrations_, _Marshmallow_, _Flask-RESTful_ e _Flask-JWT_	|
+|Os pequenos negócios e produtores locais são extremamente importantes para a economia. Infelizmente, a maioria acaba comprando de empresas tradicionais. |  Python com as bibliotecas: _SQLAlchemy_, _Migrations_, _Marshmallow_, _Flask-RESTful_ e _Flask-JWT_	|
 Nosso objetivo é incentivar e aproximar os pequenos negócios e produtores locais dos consumidores, através de um sistema simples onde os produtores podem divulgar seus produtos. Os consumidores se cadastram na plataforma e seguem os produtores, e assim se informam dos produtos| 
 
 ---
