@@ -360,5 +360,7 @@ Response:
 ```
 
 &nbsp;  
-#### Desenvolvedores
-**[Denis Rafael](https://www.linkedin.com/)**, **[Alex Miguel](https://www.linkedin.com/in/alexmiguel95/)**, **[Nicolas da Silva](https://www.linkedin.com/in/nicolasknzmd/)**, **[Paulo Santos](https://www.linkedin.com/in/paulosantosiii/)**
+#### Desenvolvedor
+**[Alex Miguel](https://www.linkedin.com/in/alexmiguel95/)**
+
+alexmiguel95@gmail.com
