@@ -367,4 +367,5 @@ alexmiguel95@gmail.com
 
 
 ## Pontos a melhorar na aplicação
-Aplicar testes nas rotas
+
+- [ ] Aplicar testes nas rotas
