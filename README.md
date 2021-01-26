@@ -364,3 +364,7 @@ Response:
 **[Alex Miguel](https://www.linkedin.com/in/alexmiguel95/)**
 
 alexmiguel95@gmail.com
+
+
+## Pontos a melhorar na aplicação
+Aplicar testes nas rotas
