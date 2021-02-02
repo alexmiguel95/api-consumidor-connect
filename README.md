@@ -368,4 +368,5 @@ alexmiguel95@gmail.com
 
 ## Pontos a melhorar na aplicação
 
+- [ ] Adicionar informações sobre como rodar o projeto localmente.
 - [ ] Aplicar testes nas rotas
